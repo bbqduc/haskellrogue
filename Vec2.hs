@@ -1,5 +1,7 @@
 module Vec2 where
 
+import System.Random
+
 data Vec2 = Vec2 Int Int
             deriving Show
 
@@ -28,3 +30,11 @@ approach v1 v2
 	| (getY v1) < (getY v2) = incY v1
 	| (getY v1) > (getY v2) = decY v1
 	| otherwise = v1
+
+moveRandom :: RandomGen g => g -> Vec2 -> (Vec2, g)
+moveRandom r v
+	| n == 0 = (decY v, rg)
+	| n == 1 = (incY v, rg)
+	| n == 2 = (decX v, rg)
+	| otherwise = (incX v, rg)
+	where (n, rg) = randomR (0 :: Int,3 :: Int) r
