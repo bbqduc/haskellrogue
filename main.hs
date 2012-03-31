@@ -8,30 +8,30 @@ import Control.Monad
 
 castEnum = toEnum . fromEnum
 
-moveAbout :: [Mon.Monster] -> Int -> Int -> IO ()
-moveAbout ms pY pX = do
+moveAbout :: [Mon.Monster] -> Vec2.Vec2 -> IO ()
+moveAbout ms v = do
 	erase
 
-	forM (map pos ms) $ \(Vec2.Vec2 x y) -> (mvAddCh x y (castEnum 'x'))
-	mvAddCh pY pX (castEnum '@')
+	forM_ (map pos ms) $ \(Vec2.Vec2 x y) -> (mvAddCh y x (castEnum 'x'))
+	mvAddCh (getY v) (getX v) (castEnum '@')
 	
 	refresh
 
-	let nms = Mon.moveMonsters ms pX pY
+	let nms = Mon.moveMonsters ms v
 	c <- getCh
 	case c of
-		KeyUp -> moveAbout nms (pY - 1) pX
-		KeyDown -> moveAbout nms (pY + 1) pX
-		KeyLeft -> moveAbout nms pY (pX - 1)
-		KeyRight -> moveAbout nms pY (pX + 1)
-		KeyChar '1' -> moveAbout nms (pY + 1) (pX - 1)
-		KeyChar '2' -> moveAbout nms (pY + 1) pX
-		KeyChar '3' -> moveAbout nms (pY + 1) (pX + 1)
-		KeyChar '4' -> moveAbout nms pY (pX - 1)
-		KeyChar '6' -> moveAbout nms pY (pX + 1)
-		KeyChar '7' -> moveAbout nms (pY - 1) (pX - 1)
-		KeyChar '8' -> moveAbout nms (pY - 1) pX
-		KeyChar '9' -> moveAbout nms (pY - 1) (pX + 1)
+		KeyUp -> moveAbout nms $ decY v
+		KeyDown -> moveAbout nms $ incY v
+		KeyLeft -> moveAbout nms $ decX v
+		KeyRight -> moveAbout nms $ incX v
+		KeyChar '1' -> moveAbout nms $ (decX . incY) v
+		KeyChar '2' -> moveAbout nms $ incY v
+		KeyChar '3' -> moveAbout nms $ (incX . incY) v
+		KeyChar '4' -> moveAbout nms $ decX v
+		KeyChar '6' -> moveAbout nms $ incX v
+		KeyChar '7' -> moveAbout nms $ (decX . decY) v
+		KeyChar '8' -> moveAbout nms $ decY v
+		KeyChar '9' -> moveAbout nms $ (incX . decY) v
 		_	-> return ()
 
 main = do
@@ -41,6 +41,6 @@ main = do
 	let monsters = [Mon.Monster { pos = Vec2.Vec2 1 1 }]
 	cursSet CursorInvisible
 	(sizeY, sizeX) <- scrSize
-	moveAbout monsters (sizeY `div` 2) (sizeX `div` 2)
+	moveAbout monsters (Vec2.Vec2 (sizeX `div` 2) (sizeY `div` 2))
 	endWin
 
