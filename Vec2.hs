@@ -25,6 +25,10 @@ decY (Vec2 x y) = Vec2 x (y-1)
 
 approach :: Vec2 -> Vec2 -> Vec2
 approach v1 v2
+	| (getX v1) < (getX v2) && (getY v1) < (getY v2) = incX . incY $ v1
+	| (getX v1) < (getX v2) && (getY v1) > (getY v2) = incX . decY $ v1
+	| (getX v1) > (getX v2) && (getY v1) < (getY v2) = decX . incY $ v1
+	| (getX v1) > (getX v2) && (getY v1) > (getY v2) = decX . decY $ v1
 	| (getX v1) < (getX v2) = incX v1
 	| (getX v1) > (getX v2) = decX v1
 	| (getY v1) < (getY v2) = incY v1

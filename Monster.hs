@@ -12,13 +12,13 @@ moveRandom :: RandomGen g => g -> Monster -> (Monster, g)
 moveRandom r m = (Monster { pos=npos }, nr)
                   where (npos, nr) = Vec2.moveRandom r (pos m)
 
-moveMonstersR :: RandomGen g => g -> [Monster] -> Int -> Int -> ([Monster], g)
-moveMonstersR r [] _ _ = ([], r)
-moveMonstersR r (m:ms) pY pX = (newM:a, b)
+moveMonstersR :: RandomGen g => g -> [Monster] -> Vec2.Vec2 -> ([Monster], g)
+moveMonstersR r [] _ = ([], r)
+moveMonstersR r (m:ms) v = (newM:a, b)
                               where (newM, newR)= Monster.moveRandom r m
-                                    (a, b) = moveMonstersR newR ms pY pX
+                                    (a, b) = moveMonstersR newR ms v
 
-moveMonsters :: [Monster] -> Int -> Int -> [Monster]
-moveMonsters [] _ _ = []
-moveMonsters (m:ms) pY pX = newM:(moveMonsters ms pY pX)
-                              where newM = Monster.approach m (Vec2 pX pY)
+moveMonsters :: [Monster] -> Vec2.Vec2 -> [Monster]
+moveMonsters [] _ = []
+moveMonsters (m:ms) v = newM:(moveMonsters ms v)
+                              where newM = Monster.approach m v
