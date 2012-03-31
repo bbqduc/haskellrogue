@@ -24,6 +24,14 @@ moveAbout ms pY pX = do
 		KeyDown -> moveAbout nms (pY + 1) pX
 		KeyLeft -> moveAbout nms pY (pX - 1)
 		KeyRight -> moveAbout nms pY (pX + 1)
+		KeyChar '1' -> moveAbout nms (pY + 1) (pX - 1)
+		KeyChar '2' -> moveAbout nms (pY + 1) pX
+		KeyChar '3' -> moveAbout nms (pY + 1) (pX + 1)
+		KeyChar '4' -> moveAbout nms pY (pX - 1)
+		KeyChar '6' -> moveAbout nms pY (pX + 1)
+		KeyChar '7' -> moveAbout nms (pY - 1) (pX - 1)
+		KeyChar '8' -> moveAbout nms (pY - 1) pX
+		KeyChar '9' -> moveAbout nms (pY - 1) (pX + 1)
 		_	-> return ()
 
 main = do
